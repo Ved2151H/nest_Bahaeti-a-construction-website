@@ -107,9 +107,14 @@ nest_bahaeti/
    npm install
    ```
 3. **Configure Environment Variables:**
-   Create a `.env` file in the `/Frontend` directory containing your Gemini API key:
+   Create a `.env` file in the `/Frontend` directory containing your Gemini API key. 
+   
+   > [!WARNING]
+   > **Security First:** Never commit `.env` or local configuration files (containing actual credentials, passwords, or API keys) to your Git repository. Ensure these files are listed in your `.gitignore` file.
+   
+   Add your key using a clean placeholder:
    ```env
-   GEMINI_API_KEY=AIzaSy...your_gemini_api_key...
+   GEMINI_API_KEY="YOUR_GEMINI_API_KEY_HERE"
    ```
 4. **Start the Vite dev server:**
    The frontend runs on `http://localhost:3000` by default:
