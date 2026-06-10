@@ -1,0 +1,128 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "A user of the PropMax platform.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "description": "Firebase Auth UID" },
+        "email": { "type": "string", "format": "email" },
+        "displayName": { "type": "string" },
+        "role": { "type": "string", "enum": ["admin", "director", "advisor", "developer", "buyer"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "email", "role"]
+    },
+    "Lead": {
+      "title": "Lead",
+      "description": "A potential buyer lead.",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "phone": { "type": "string" },
+        "email": { "type": "string", "format": "email" },
+        "source": { "type": "string" },
+        "status": { "type": "string", "enum": ["New", "Contacted", "Site Visit", "Negotiation", "Booked", "Lost"] },
+        "assignedTo": { "type": "string", "description": "UID of the Advisor" },
+        "budget": { "type": "number" },
+        "notes": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["name", "status", "createdAt"]
+    },
+    "Unit": {
+      "title": "Unit",
+      "description": "A property unit in a project.",
+      "type": "object",
+      "properties": {
+        "projectId": { "type": "string" },
+        "unitNumber": { "type": "string" },
+        "type": { "type": "string" },
+        "status": { "type": "string", "enum": ["Available", "Blocked", "Sold"] },
+        "price": { "type": "number" },
+        "bookedBy": { "type": "string", "description": "UID of the Buyer" },
+        "advisorId": { "type": "string", "description": "UID of the Advisor who closed it" },
+        "bookedAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["projectId", "unitNumber", "status"]
+    },
+    "ProjectBudget": {
+      "title": "Project Budget",
+      "description": "Budget allocation and tracking for a project.",
+      "type": "object",
+      "properties": {
+        "totalBudget": { "type": "number" },
+        "categories": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": { "type": "string" },
+              "name": { "type": "string" },
+              "allocated": { "type": "number" },
+              "fill": { "type": "string" }
+            }
+          }
+        }
+      },
+      "required": ["totalBudget", "categories"]
+    },
+    "Expense": {
+      "title": "Expense",
+      "description": "An expense logged against a project budget category.",
+      "type": "object",
+      "properties": {
+        "projectId": { "type": "string" },
+        "categoryId": { "type": "string" },
+        "amount": { "type": "number" },
+        "date": { "type": "string", "format": "date" },
+        "vendor": { "type": "string" },
+        "notes": { "type": "string" },
+        "status": { "type": "string", "enum": ["Paid", "Committed"] },
+        "loggedBy": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["projectId", "categoryId", "amount", "date", "status", "loggedBy"]
+    },
+    "BudgetHistory": {
+      "title": "Budget History",
+      "description": "Audit trail of budget changes.",
+      "type": "object",
+      "properties": {
+        "projectId": { "type": "string" },
+        "changedBy": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" },
+        "changes": { "type": "string" }
+      },
+      "required": ["projectId", "changedBy", "timestamp", "changes"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/User" },
+      "description": "User profiles and roles."
+    },
+    "/leads/{leadId}": {
+      "schema": { "$ref": "#/entities/Lead" },
+      "description": "Sales leads."
+    },
+    "/units/{unitId}": {
+      "schema": { "$ref": "#/entities/Unit" },
+      "description": "Property units."
+    },
+    "/project_budgets/{projectId}": {
+      "schema": { "$ref": "#/entities/ProjectBudget" },
+      "description": "Project budget tracking."
+    },
+    "/expenses/{expenseId}": {
+      "schema": { "$ref": "#/entities/Expense" },
+      "description": "Project expenses."
+    },
+    "/budget_history/{historyId}": {
+      "schema": { "$ref": "#/entities/BudgetHistory" },
+      "description": "Budget change history."
+    }
+  }
+}

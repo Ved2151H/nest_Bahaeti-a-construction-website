@@ -1,0 +1,151 @@
+38:    <div className="min-h-screen bg-brand-bg text-brand-ink font-sans selection:bg-brand-accent selection:text-white">
+40:      <nav className={`fixed w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-white/90 backdrop-blur-md shadow-sm py-4' : 'bg-transparent py-6'}`}>
+41:        <div className="max-w-7xl mx-auto px-6 md:px-12 flex justify-between items-center">
+42:          <div className="flex flex-col">
+43:            <span className={`font-serif text-2xl md:text-3xl font-bold leading-none ${isScrolled ? 'text-brand-ink' : 'text-white'}`}>My Nest</span>
+44:            <span className={`text-[10px] uppercase tracking-widest font-semibold ${isScrolled ? 'text-brand-accent' : 'text-white/80'}`}>By Baheti Housing</span>
+48:          <div className={`hidden md:flex items-center gap-8 text-sm font-medium uppercase tracking-widest ${isScrolled ? 'text-brand-ink' : 'text-white'}`}>
+49:            <button onClick={() => scrollTo('overview')} className="hover:text-brand-accent transition-colors">Overview</button>
+50:            <button onClick={() => scrollTo('residences')} className="hover:text-brand-accent transition-colors">Residences</button>
+51:            <button onClick={() => scrollTo('amenities')} className="hover:text-brand-accent transition-colors">Amenities</button>
+52:            <button onClick={() => scrollTo('specifications')} className="hover:text-brand-accent transition-colors">Specifications</button>
+53:            <button onClick={() => scrollTo('location')} className="hover:text-brand-accent transition-colors">Location</button>
+54:            <button onClick={onLoginClick} className="hover:text-brand-accent transition-colors flex items-center gap-2">
+57:            <button onClick={() => scrollTo('contact')} className={`px-6 py-2 rounded-full border transition-colors ${isScrolled ? 'border-brand-ink hover:bg-brand-ink hover:text-white' : 'border-white hover:bg-white hover:text-brand-ink'}`}>
+64:            className={`md:hidden ${isScrolled ? 'text-brand-ink' : 'text-white'}`}
+74:        <div className="fixed inset-0 z-40 bg-brand-bg pt-24 px-6 flex flex-col gap-6 text-xl font-serif">
+75:          <button onClick={() => scrollTo('overview')} className="text-left border-b border-brand-border/30 pb-4">Overview</button>
+76:          <button onClick={() => scrollTo('residences')} className="text-left border-b border-brand-border/30 pb-4">Residences</button>
+77:          <button onClick={() => scrollTo('amenities')} className="text-left border-b border-brand-border/30 pb-4">Amenities</button>
+78:          <button onClick={() => scrollTo('specifications')} className="text-left border-b border-brand-border/30 pb-4">Specifications</button>
+79:          <button onClick={() => scrollTo('location')} className="text-left border-b border-brand-border/30 pb-4">Location</button>
+80:          <button onClick={() => { setMobileMenuOpen(false); onLoginClick(); }} className="text-left border-b border-brand-border/30 pb-4 flex items-center gap-2">
+83:          <button onClick={() => scrollTo('contact')} className="bg-brand-ink text-white py-4 rounded-lg text-center uppercase tracking-widest text-sm font-sans mt-4">
+90:      <section className="relative h-screen flex items-center justify-center overflow-hidden">
+91:        <div className="absolute inset-0">
+95:            className="w-full h-full object-cover"
+98:          <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/80"></div>
+101:        <div className="relative z-10 text-center text-white px-6 max-w-4xl mx-auto mt-20">
+107:            <h1 className="font-serif text-6xl md:text-8xl lg:text-9xl mb-4 leading-none">My Nest</h1>
+108:            <p className="text-lg md:text-2xl font-light tracking-wide mb-8 text-white/90">
+109:              Modern Luxury by <span className="font-semibold text-brand-accent">Baheti Housing</span>
+111:            <p className="text-sm md:text-base uppercase tracking-[0.2em] mb-12 text-white/70 max-w-2xl mx-auto leading-relaxed">
+116:              className="bg-brand-accent text-white px-10 py-4 rounded-full uppercase tracking-widest text-sm font-medium hover:bg-white hover:text-brand-ink transition-all duration-300 shadow-xl"
+125:      <section id="overview" className="py-24 md:py-32 px-6">
+126:        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+133:            <h2 className="text-xs uppercase tracking-widest text-brand-accent font-semibold mb-4">The Vision</h2>
+134:            <h3 className="font-serif text-4xl md:text-5xl mb-8 leading-tight">A Standalone Icon of <br/>Modern Luxury.</h3>
+135:            <p className="text-brand-ink/70 leading-relaxed mb-6 text-lg font-light">
+138:            <p className="text-brand-ink/70 leading-relaxed mb-8 text-lg font-light">
+142:            <div className="grid grid-cols-2 gap-8 border-t border-brand-border/30 pt-8">
+144:                <div className="font-serif text-5xl text-brand-ink mb-2">136</div>
+145:                <div className="text-xs uppercase tracking-widest text-brand-ink/60 font-semibold">Exclusive Families</div>
+148:                <div className="font-serif text-5xl text-brand-ink mb-2">2 & 3</div>
+149:                <div className="text-xs uppercase tracking-widest text-brand-ink/60 font-semibold">BHK Configurations</div>
+155:            className="relative h-[600px] rounded-2xl overflow-hidden"
+164:              className="w-full h-full object-cover"
+167:            <div className="absolute inset-0 border-8 border-brand-bg/20 rounded-2xl m-4 pointer-events-none"></div>
+173:      <section id="residences" className="py-24 md:py-32 bg-brand-ink text-brand-bg px-6">
+174:        <div className="max-w-7xl mx-auto">
+175:          <div className="text-center mb-20">
+176:            <h2 className="text-xs uppercase tracking-widest text-brand-accent font-semibold mb-4">The Residences</h2>
+177:            <h3 className="font-serif text-4xl md:text-5xl">Thoughtfully Designed Spaces</h3>
+180:          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+184:                className="group"
+190:                <div className="relative h-[400px] rounded-xl overflow-hidden mb-8">
+194:                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+197:                  <div className="absolute top-6 left-6 bg-brand-ink/80 backdrop-blur-md text-white px-4 py-2 text-xs uppercase tracking-widest font-semibold rounded-sm">
+201:                <div className="flex justify-between items-end mb-4">
+202:                  <h4 className="font-serif text-4xl text-brand-accent">{config.type}</h4>
+203:                  <span className="text-sm uppercase tracking-widest text-white/60">{config.carpetArea}</span>
+205:                <p className="text-white/70 font-light leading-relaxed mb-6">
+208:                <button onClick={() => scrollTo('contact')} className="flex items-center gap-2 text-xs uppercase tracking-widest font-semibold hover:text-brand-accent transition-colors">
+218:      <section id="amenities" className="py-24 md:py-32 px-6 bg-white">
+219:        <div className="max-w-7xl mx-auto">
+220:          <div className="text-center mb-20">
+221:            <h2 className="text-xs uppercase tracking-widest text-brand-accent font-semibold mb-4">Lifestyle</h2>
+222:            <h3 className="font-serif text-4xl md:text-5xl">Premium Amenities</h3>
+225:          <div className="space-y-16">
+228:                <h4 className="font-serif text-2xl text-brand-ink mb-8 border-b border-brand-border/30 pb-4">{category.category}</h4>
+229:                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+235:                        className="bg-brand-bg/30 p-8 rounded-xl border border-brand-border/30 hover:border-brand-accent/50 transition-colors group"
+241:                        <div className="w-14 h-14 rounded-full bg-white border border-brand-border/50 flex items-center justify-center mb-6 text-brand-accent shadow-sm group-hover:scale-110 transition-transform">
+244:                        <h5 className="font-serif text-xl text-brand-ink mb-3">{amenity.name}</h5>
+245:                        <p className="text-brand-ink/70 text-sm leading-relaxed">{amenity.description}</p>
+257:      <section id="specifications" className="py-24 md:py-32 px-6 bg-brand-bg">
+258:        <div className="max-w-4xl mx-auto">
+259:          <div className="text-center mb-16">
+260:            <h2 className="text-xs uppercase tracking-widest text-brand-accent font-semibold mb-4">Quality</h2>
+261:            <h3 className="font-serif text-4xl md:text-5xl">Premium Specifications</h3>
+262:            <p className="text-brand-ink/70 mt-6 max-w-2xl mx-auto">
+267:          <div className="space-y-4">
+271:                <div key={idx} className="border border-brand-border/50 rounded-lg bg-white overflow-hidden">
+274:                    className="w-full px-6 py-5 flex items-center justify-between bg-white hover:bg-brand-bg/50 transition-colors text-left"
+276:                    <span className="font-serif text-xl text-brand-ink">{spec.category}</span>
+277:                    {isActive ? <ChevronUp className="text-brand-accent" size={20} /> : <ChevronDown className="text-brand-ink/50" size={20} />}
+282:                    className="overflow-hidden"
+284:                    <div className="px-6 pb-6 pt-2 border-t border-brand-border/20">
+285:                      <ul className="space-y-3">
+287:                          <li key={dIdx} className="flex items-start gap-3 text-brand-ink/80">
+288:                            <CheckCircle className="text-brand-accent shrink-0 mt-0.5" size={16} />
+289:                            <span className="text-sm leading-relaxed">{detail}</span>
+303:      <section id="location" className="py-24 md:py-32 px-6">
+304:        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+311:            <h2 className="text-xs uppercase tracking-widest text-brand-accent font-semibold mb-4">Connectivity</h2>
+312:            <h3 className="font-serif text-4xl md:text-5xl mb-6 leading-tight">Connected to Everything that Matters.</h3>
+313:            <div className="flex items-start gap-3 mb-12 text-brand-ink/80">
+314:              <MapPin className="text-brand-accent shrink-0 mt-1" size={20} />
+315:              <p className="text-lg font-light">{PROJECT_DETAILS.location}</p>
+318:            <div className="space-y-6">
+320:                <div key={idx} className="flex items-center justify-between border-b border-brand-border/30 pb-4">
+321:                  <div className="font-medium text-brand-ink">{highlight.place}</div>
+322:                  <div className="text-right">
+323:                    <div className="text-brand-accent font-serif text-xl">{highlight.time}</div>
+324:                    <div className="text-[10px] uppercase tracking-widest text-brand-ink/50">{highlight.distance}</div>
+332:            className="h-[500px] bg-gray-200 rounded-2xl overflow-hidden relative"
+342:              className="w-full h-full object-cover grayscale opacity-80 mix-blend-multiply"
+345:            <div className="absolute inset-0 flex items-center justify-center">
+346:              <div className="bg-brand-ink text-white px-6 py-4 rounded-xl shadow-2xl flex flex-col items-center text-center max-w-[200px]">
+347:                <div className="w-12 h-12 bg-brand-accent rounded-full flex items-center justify-center mb-3 -mt-10 shadow-lg border-4 border-white">
+348:                  <Home size={20} className="text-white" />
+350:                <span className="font-serif text-xl mb-1">My Nest</span>
+351:                <span className="text-[10px] uppercase tracking-widest text-white/60">Beed Bypass Road</span>
+359:      <section id="contact" className="bg-brand-ink text-brand-bg py-24 px-6 border-t border-white/10">
+360:        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16">
+362:            <h2 className="font-serif text-5xl md:text-6xl mb-6">Register Your Interest</h2>
+363:            <p className="text-brand-bg/60 font-light text-lg mb-12 max-w-md">
+367:            <div className="space-y-6 text-brand-bg/80">
+368:              <div className="flex items-center gap-4">
+369:                <div className="w-12 h-12 rounded-full border border-brand-border/30 flex items-center justify-center text-brand-accent">
+373:                  <div className="text-[10px] uppercase tracking-widest text-brand-bg/50 mb-1">Call Us</div>
+374:                  <div className="font-serif text-xl">+91 98765 43210</div>
+377:              <div className="flex items-center gap-4">
+378:                <div className="w-12 h-12 rounded-full border border-brand-border/30 flex items-center justify-center text-brand-accent">
+382:                  <div className="text-[10px] uppercase tracking-widest text-brand-bg/50 mb-1">Email Us</div>
+383:                  <div className="font-serif text-xl">sales@bahetihousing.com</div>
+389:          <div className="bg-white text-brand-ink p-8 md:p-12 rounded-2xl shadow-2xl">
+390:            <h3 className="font-serif text-3xl mb-8">Enquiry Form</h3>
+391:            <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
+392:              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+394:                  <label className="block text-[10px] uppercase tracking-widest font-semibold text-brand-ink/60 mb-2">First Name</label>
+395:                  <input type="text" className="w-full border-b border-brand-border py-2 focus:outline-none focus:border-brand-accent bg-transparent transition-colors" />
+398:                  <label className="block text-[10px] uppercase tracking-widest font-semibold text-brand-ink/60 mb-2">Last Name</label>
+399:                  <input type="text" className="w-full border-b border-brand-border py-2 focus:outline-none focus:border-brand-accent bg-transparent transition-colors" />
+403:                <label className="block text-[10px] uppercase tracking-widest font-semibold text-brand-ink/60 mb-2">Phone Number</label>
+404:                <input type="tel" className="w-full border-b border-brand-border py-2 focus:outline-none focus:border-brand-accent bg-transparent transition-colors" />
+407:                <label className="block text-[10px] uppercase tracking-widest font-semibold text-brand-ink/60 mb-2">Email Address</label>
+408:                <input type="email" className="w-full border-b border-brand-border py-2 focus:outline-none focus:border-brand-accent bg-transparent transition-colors" />
+411:                <label className="block text-[10px] uppercase tracking-widest font-semibold text-brand-ink/60 mb-4">Interested In</label>
+412:                <div className="flex gap-4">
+413:                  <label className="flex items-center gap-2 cursor-pointer">
+414:                    <input type="radio" name="config" className="accent-brand-accent" defaultChecked />
+415:                    <span className="text-sm">2 BHK</span>
+417:                  <label className="flex items-center gap-2 cursor-pointer">
+418:                    <input type="radio" name="config" className="accent-brand-accent" />
+419:                    <span className="text-sm">3 BHK</span>
+423:              <button className="w-full bg-brand-ink text-white py-4 rounded-lg uppercase tracking-widest text-sm font-medium hover:bg-brand-accent transition-colors mt-4">
+430:        <div className="max-w-7xl mx-auto mt-24 pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-brand-bg/40">
+432:          <div className="flex gap-6">
+433:            <a href="#" className="hover:text-brand-bg transition-colors">Privacy Policy</a>
+434:            <a href="#" className="hover:text-brand-bg transition-colors">Terms of Service</a>
+435:            <a href="#" className="hover:text-brand-bg transition-colors">RERA Details</a>

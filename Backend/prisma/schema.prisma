@@ -1,0 +1,164 @@
+  datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id              String         @id
+  name            String
+  email           String         @unique
+  role            String         // 'admin', 'director', 'advisor', 'developer', 'buyer'
+  status          String         @default("active")
+  avatar          String?        // Maps to photoURL
+  assignedAgentId String?
+  reportsTo       String?
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+
+  // Self-relations for team reporting
+  agent           User?          @relation("AgentClients", fields: [assignedAgentId], references: [id])
+  clients         User[]         @relation("AgentClients")
+  manager         User?          @relation("ManagerReports", fields: [reportsTo], references: [id])
+  reports         User[]         @relation("ManagerReports")
+
+  // Relationships
+  assignedLeads   Lead[]         @relation("LeadAssignee")
+  unitsAsAdvisor  Unit[]         @relation("UnitAdvisor")
+
+  @@map("users")
+}
+
+model ProjectBudget {
+  projectId  String           @id
+  totalCap   Float
+  categories BudgetCategory[]
+  updatedAt  DateTime         @default(now()) @updatedAt
+
+  @@map("project_budgets")
+}
+
+model BudgetCategory {
+  id              String        @id @default(uuid())
+  name            String
+  allocated       Float
+  color           String
+  projectBudgetId String
+  projectBudget   ProjectBudget @relation(fields: [projectBudgetId], references: [projectId], onDelete: Cascade)
+
+  @@map("budget_categories")
+}
+
+model Expense {
+  id          String   @id @default(uuid())
+  projectId   String
+  categoryId  String
+  amount      Float
+  date        String   // String date format (YYYY-MM-DD) as used in frontend form
+  vendor      String
+  notes       String?
+  status      String   // 'Paid' | 'Committed'
+  loggedBy    String
+  createdAt   DateTime @default(now())
+
+  @@map("expenses")
+}
+
+model BudgetHistory {
+  id            String   @id @default(uuid())
+  projectId     String
+  action        String
+  description   String
+  performedBy   String
+  timestamp     DateTime @default(now())
+  previousTotal Float?
+  newTotal      Float?
+
+  @@map("budget_history")
+}
+
+model Unit {
+  id            String    @id
+  unitNumber    String
+  floor         Int
+  typeId        String
+  status        String    // 'Available', 'On Hold', 'Booked', 'Sold', 'Blocked'
+  price         Float
+  facing        String?
+  buyerId       String?
+  wing          String?
+  linkedLeadId  String?
+  bookedBy      String?
+  advisorId     String?
+  bookedAt      DateTime?
+  tokenAmount   Float?
+  updatedAt     DateTime? @default(now()) @updatedAt
+  projectId     String    @default("proj_mynest")
+
+  // Relationships
+  advisor       User?     @relation("UnitAdvisor", fields: [advisorId], references: [id])
+  linkedLead    Lead?     @relation("UnitLead", fields: [linkedLeadId], references: [id])
+
+  @@map("units")
+}
+
+model Lead {
+  id             String         @id @default(uuid())
+  name           String         // Buyer name
+  phone          String?
+  email          String?
+  source         String         @default("Website")
+  status         String         @default("Lead") // 'New' | 'Lead' | 'Site Visit' | 'Negotiation' | 'Booked' | 'Lost'
+  assignedTo     String
+  budget         Float
+  notes          String?
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @default(now()) @updatedAt
+  temperature    String         @default("Warm") // 'Hot' | 'Warm' | 'Cold'
+  daysInStage    Int            @default(0)
+  probability    Int            @default(50)
+  verification   String         @default("Unverified")
+  nextAction     String         @default("Initial Contact")
+  timeline       String         @default("1-3 Months")
+  projectId      String?
+  unitId         String?
+  unitName       String?
+  buyerId        String?
+  buyerProfile   String?
+  amount         String?        // Formatted amount (e.g. ₹50 L)
+
+  // Relationships
+  assignee       User           @relation("LeadAssignee", fields: [assignedTo], references: [id])
+  history        LeadHistory[]
+  documents      LeadDocument[]
+  units          Unit[]         @relation("UnitLead")
+
+  @@map("leads")
+}
+
+model LeadHistory {
+  id        String   @id @default(uuid())
+  leadId    String
+  lead      Lead     @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  date      String   // E.g., 'Today' or formatted date
+  note      String
+  author    String
+
+  @@map("lead_history")
+}
+
+model LeadDocument {
+  id        String   @id @default(uuid())
+  leadId    String
+  lead      Lead     @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  name      String
+  type      String   // 'pdf' | 'img' | 'doc'
+  status    String   // 'missing' | 'pending_signature' | 'under_review' | 'executed'
+  updatedAt String
+  required  Boolean
+
+  @@map("lead_documents")
+}

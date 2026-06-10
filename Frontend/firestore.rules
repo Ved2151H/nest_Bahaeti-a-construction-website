@@ -1,0 +1,156 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // ===============================================================
+    // Assumed Data Model
+    // ===============================================================
+    //
+    // Collection: users
+    // Document ID: uid
+    // Fields:
+    //   - uid: string (required)
+    //   - email: string (required)
+    //   - displayName: string (optional)
+    //   - role: string (required, enum: admin, director, advisor, developer, buyer)
+    //   - createdAt: timestamp (optional)
+    //
+    // Collection: leads
+    // Document ID: auto-generated
+    // Fields:
+    //   - name: string (required)
+    //   - phone: string (optional)
+    //   - email: string (optional)
+    //   - source: string (optional)
+    //   - status: string (required, enum: New, Contacted, Site Visit, Negotiation, Booked, Lost)
+    //   - assignedTo: string (optional, uid)
+    //   - budget: number (optional)
+    //   - notes: string (optional)
+    //   - createdAt: timestamp (required)
+    //   - updatedAt: timestamp (optional)
+    //
+    // Collection: units
+    // Document ID: auto-generated
+    // Fields:
+    //   - projectId: string (required)
+    //   - unitNumber: string (required)
+    //   - type: string (optional)
+    //   - status: string (required, enum: Available, Blocked, Sold)
+    //   - price: number (optional)
+    //   - bookedBy: string (optional, uid)
+    //   - advisorId: string (optional, uid)
+    //   - bookedAt: timestamp (optional)
+    //   - updatedAt: timestamp (optional)
+    //
+    // ===============================================================
+
+    // Helper Functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    function isAdmin() {
+      return isAuthenticated() &&
+        (get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin' ||
+          request.auth.token.email == "karanph@tuljaigroup.com");
+    }
+
+    function isDirector() {
+      return isAuthenticated() &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'director';
+    }
+
+    function isAdvisor() {
+      return isAuthenticated() &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'advisor';
+    }
+
+    function isValidUser(data) {
+      return data.keys().hasAll(['uid', 'email', 'role']) &&
+             data.uid is string &&
+             data.email is string &&
+             data.role in ['admin', 'director', 'advisor', 'developer', 'buyer'] &&
+             (!('displayName' in data) || data.displayName is string) &&
+             (!('createdAt' in data) || data.createdAt is timestamp) &&
+             (!('status' in data) || data.status is string) &&
+             (!('assignedAgentId' in data) || data.assignedAgentId == null || data.assignedAgentId is string) &&
+             (!('reportsTo' in data) || data.reportsTo == null || data.reportsTo is string) &&
+             (!('updatedAt' in data) || data.updatedAt is timestamp);
+    }
+
+    function isValidLead(data) {
+      return data.keys().hasAny(['name', 'buyerName']) && data.keys().hasAll(['status', 'createdAt']) &&
+             (!('name' in data) || (data.name is string && data.name.size() > 0 && data.name.size() < 100)) &&
+             (!('buyerName' in data) || (data.buyerName is string && data.buyerName.size() > 0 && data.buyerName.size() < 100)) &&
+             data.status in ['New', 'Lead', 'Contacted', 'Site Visit', 'Negotiation', 'Booked', 'Lost', 'Closed Won', 'Closed Lost'] &&
+             data.createdAt is timestamp &&
+             (!('phone' in data) || (data.phone is string && data.phone.size() < 20)) &&
+             (!('email' in data) || (data.email is string && data.email.size() < 100)) &&
+             (!('source' in data) || (data.source is string && data.source.size() < 100)) &&
+             (!('assignedTo' in data) || data.assignedTo is string) &&
+             (!('budget' in data) || data.budget is number) &&
+             (!('notes' in data) || (data.notes is string && data.notes.size() < 2000)) &&
+             (!('finalUnitId' in data) || data.finalUnitId is string) &&
+             (!('interestedUnitIds' in data) || data.interestedUnitIds is list) &&
+             (!('updatedAt' in data) || data.updatedAt is timestamp);
+    }
+
+    function isValidUnit(data) {
+      return data.keys().hasAll(['projectId', 'unitNumber', 'status']) &&
+             data.projectId is string && data.projectId.size() > 0 && data.projectId.size() < 100 &&
+             data.unitNumber is string && data.unitNumber.size() > 0 && data.unitNumber.size() < 50 &&
+             data.status in ['Available', 'Blocked', 'Sold'] &&
+             (!('type' in data) || (data.type is string && data.type.size() < 50)) &&
+             (!('price' in data) || data.price is number) &&
+             (!('bookedBy' in data) || data.bookedBy is string) &&
+             (!('advisorId' in data) || data.advisorId is string) &&
+             (!('linkedLeadId' in data) || data.linkedLeadId is string) &&
+             (!('bookedAt' in data) || data.bookedAt is timestamp) &&
+             (!('updatedAt' in data) || data.updatedAt is timestamp) &&
+             (!('tokenAmount' in data) || data.tokenAmount is number);
+    }
+
+    // Rules
+    match /users/{userId} {
+      allow read: if isAuthenticated();
+      allow create: if isAuthenticated() && isValidUser(request.resource.data) &&
+                    ((isOwner(userId) && request.resource.data.role == 'buyer') || isAdmin());
+      allow update: if isAuthenticated() && isValidUser(request.resource.data) &&
+                    ((isOwner(userId) && request.resource.data.role == resource.data.role) || isAdmin());
+      allow delete: if isAdmin();
+    }
+
+    match /leads/{leadId} {
+      allow read: if isAuthenticated() && (isAdmin() || isDirector() || (isAdvisor() && resource.data.assignedTo == request.auth.uid));
+      allow create: if isAuthenticated() && (isAdmin() || isDirector() || isAdvisor()) && isValidLead(request.resource.data);
+      allow update: if isAuthenticated() && (isAdmin() || isDirector() || (isAdvisor() && resource.data.assignedTo == request.auth.uid)) && isValidLead(request.resource.data);
+      allow delete: if isAdmin() || isDirector();
+    }
+
+    match /units/{unitId} {
+      allow read: if isAuthenticated();
+      allow create: if isAuthenticated() && (isAdmin() || isDirector()) && isValidUnit(request.resource.data);
+      allow update: if isAuthenticated() && (isAdmin() || isDirector() || isAdvisor()) && isValidUnit(request.resource.data);
+      allow delete: if isAdmin() || isDirector();
+    }
+
+    match /project_budgets/{projectId} {
+      allow read: if isAuthenticated() && (isAdmin() || isDirector());
+      allow write: if isAuthenticated() && (isAdmin() || isDirector());
+    }
+
+    match /expenses/{expenseId} {
+      allow read: if isAuthenticated() && (isAdmin() || isDirector());
+      allow write: if isAuthenticated() && (isAdmin() || isDirector());
+    }
+
+    match /budget_history/{historyId} {
+      allow read: if isAuthenticated() && (isAdmin() || isDirector());
+      allow write: if isAuthenticated() && (isAdmin() || isDirector());
+    }
+  }
+}
